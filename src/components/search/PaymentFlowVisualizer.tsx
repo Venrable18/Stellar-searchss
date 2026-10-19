@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 import type { SearchSession } from '../../hooks/useSearch'
 import { explorerTxUrl, truncateHash } from '../../lib/stellar'
@@ -34,7 +34,7 @@ export function PaymentFlowVisualizer({ session }: Props) {
   const doneCount  = isComplete ? TOTAL_STEPS : activeIdx
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
@@ -47,7 +47,7 @@ export function PaymentFlowVisualizer({ session }: Props) {
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <span className="font-display text-xs text-white/30 tracking-widest">x402 PAYMENT FLOW</span>
+        <span className="font-display text-xs text-white/60 tracking-widest">x402 PAYMENT FLOW</span>
         {session.status === 'complete' && <span className="font-display text-xs text-neon-green">✓ SETTLED</span>}
         {session.status === 'error'    && <span className="font-display text-xs text-red-400">✗ FAILED</span>}
       </div>
@@ -63,7 +63,7 @@ export function PaymentFlowVisualizer({ session }: Props) {
 
             return (
               <div key={step.label} className="flex flex-col items-center gap-2 flex-1">
-                <motion.div
+                <m.div
                   className="w-10 h-10 rounded-full flex items-center justify-center text-sm border relative"
                   animate={{
                     borderColor: stepFailed ? '#ef4444'
@@ -77,38 +77,38 @@ export function PaymentFlowVisualizer({ session }: Props) {
                   }}
                 >
                   {stepDone ? (
-                    <motion.span
+                    <m.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       style={{ color: step.color }}
                       className="text-xs font-bold"
-                    >✓</motion.span>
+                    >✓</m.span>
                   ) : stepFailed ? (
                     <span style={{ color: '#ef4444' }} className="text-xs font-bold">✗</span>
                   ) : (
-                    <span style={{ color: stepActive ? step.color : 'rgba(255,255,255,0.25)' }} className="text-xs">
+                    <span style={{ color: stepActive ? step.color : 'rgba(255,255,255,0.6)' }} className="text-xs">
                       {step.icon}
                     </span>
                   )}
                   {stepActive && (
-                    <motion.div
+                    <m.div
                       className="absolute inset-0 rounded-full border"
                       style={{ borderColor: step.color }}
                       animate={{ scale: [1, 1.8], opacity: [0.8, 0] }}
                       transition={{ duration: 1, repeat: Infinity }}
                     />
                   )}
-                </motion.div>
+                </m.div>
                 <div className="text-center">
                   <p className="font-display text-xs" style={{
                     color: stepFailed ? '#ef4444'
                       : stepDone || stepActive ? step.color
-                      : 'rgba(255,255,255,0.25)',
+                      : 'rgba(255,255,255,0.6)',
                     fontSize: '10px',
                   }}>
                     {step.label}
                   </p>
-                  <p className="text-white/20 hidden sm:block" style={{ fontSize: '9px' }}>{step.sub}</p>
+                  <p className="text-white/60 hidden sm:block" style={{ fontSize: '9px' }}>{step.sub}</p>
                 </div>
               </div>
             )
@@ -118,7 +118,7 @@ export function PaymentFlowVisualizer({ session }: Props) {
 
       {/* Status message */}
       <AnimatePresence mode="wait">
-        <motion.div
+        <m.div
           key={session.status}
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
@@ -126,29 +126,29 @@ export function PaymentFlowVisualizer({ session }: Props) {
           className="flex items-center gap-3 py-2.5 px-3 rounded-lg bg-white/4 border border-white/5"
         >
           {session.status === 'searching' && (
-            <motion.div
+            <m.div
               className="w-2 h-2 rounded-full bg-neon-cyan flex-shrink-0"
               animate={{ opacity: [1, 0.2, 1] }}
               transition={{ duration: 0.7, repeat: Infinity }}
             />
           )}
-          <p className="font-display text-xs text-white/50">
+          <p className="font-display text-xs text-white/60">
             {isSearching && `→ Step ${session.step ?? 1}/${TOTAL_STEPS}: ${STEPS[activeIdx]?.label} — ${STEPS[activeIdx]?.sub}...`}
             {isComplete  && `✓ Payment settled — ${session.results.length} results in ${session.durationMs}ms`}
             {isError     && `✗ ${session.error}`}
           </p>
-        </motion.div>
+        </m.div>
       </AnimatePresence>
 
       {/* TX hash */}
       {session.status === 'complete' && session.txHash && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           className="space-y-2"
         >
           <div className="flex items-center justify-between py-2 px-3 rounded bg-neon-green/5 border border-neon-green/20">
-            <span className="font-display text-xs text-neon-green/50">TX HASH</span>
+            <span className="font-display text-xs text-neon-green/70">TX HASH</span>
             <a
               href={explorerTxUrl(session.txHash)}
               target="_blank"
@@ -166,14 +166,14 @@ export function PaymentFlowVisualizer({ session }: Props) {
                 ['STATUS',  'SETTLED'],
               ] as [string, string][]).map(([k, v]) => (
                 <div key={k} className="py-1.5 px-2 rounded bg-white/4 text-center">
-                  <p className="font-display text-white/25" style={{ fontSize: '8px' }}>{k}</p>
+                  <p className="font-display text-white/60" style={{ fontSize: '8px' }}>{k}</p>
                   <p className="font-display text-neon-cyan" style={{ fontSize: '10px' }}>{v}</p>
                 </div>
               ))}
             </div>
           )}
-        </motion.div>
+        </m.div>
       )}
-    </motion.div>
+    </m.div>
   )
 }
